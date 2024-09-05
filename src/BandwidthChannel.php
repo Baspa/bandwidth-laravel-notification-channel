@@ -2,14 +2,22 @@
 
 namespace NotificationChannels\BandwidthLaravelNotificationChannel;
 
-use NotificationChannels\BandwidthLaravelNotificationChannel\Exceptions\CouldNotSendNotification;
+use BandwidthLib\BandwidthClient;
+use BandwidthLib\Configuration;
+use BandwidthLib\Messaging\Models\MessageRequest;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\BandwidthLaravelNotificationChannel\Exceptions\CouldNotSendNotification;
+use NotificationChannels\BandwidthLaravelNotificationChannel\BandwidthMessage;
 
-class BandWidthChannel
+class BandwidthChannel
 {
-    public function __construct()
+    protected $client;
+    protected $accountId;
+
+    public function __construct(Configuration $config, string $accountId)
     {
-        // Initialisation code here
+        $this->client = new BandwidthClient($config);
+        $this->accountId = $accountId;
     }
 
     /**
@@ -22,10 +30,30 @@ class BandWidthChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        //$response = [a call to the api of your notification send]
+        if (!method_exists($notification, 'toBandwidth')) {
+            throw CouldNotSendNotification::invalidNotificationMethod('toBandwidth');
+        }
 
-        //        if ($response->error) { // replace this by the code need to check for errors
-        //            throw CouldNotSendNotification::serviceRespondedWithAnError($response);
-        //        }
+        $message = $notification->toBandwidth($notifiable);
+
+        if (!$message instanceof BandwidthMessage) {
+            throw CouldNotSendNotification::invalidMessageObject($message);
+        }
+
+        $messagingClient = $this->client->getMessaging()->getClient();
+
+        $body = new MessageRequest();
+        $messageArray = $message->toArray();
+        $body->from = $messageArray['from'];
+        $body->to = [$messageArray['to']];
+        $body->text = $messageArray['text'];
+        $body->applicationId = $messageArray['applicationId'];
+
+        try {
+            $response = $messagingClient->createMessage($this->accountId, $body);
+            return $response;
+        } catch (\Exception $e) {
+            throw CouldNotSendNotification::serviceRespondedWithAnError($e);
+        }
     }
 }

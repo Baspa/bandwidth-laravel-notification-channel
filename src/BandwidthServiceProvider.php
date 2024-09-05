@@ -3,6 +3,7 @@
 namespace NotificationChannels\BandwidthLaravelNotificationChannel;
 
 use Illuminate\Support\ServiceProvider;
+use BandwidthLib\Configuration;
 
 class BandWidthServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,14 @@ class BandWidthServiceProvider extends ServiceProvider
                 );
             });
          */
+
+        // Set up Bandwidth configuration
+        $this->app->singleton(Configuration::class, function ($app) {
+            return new Configuration([
+                'messagingBasicAuthUserName' => config('services.bandwidth.username'),
+                'messagingBasicAuthPassword' => config('services.bandwidth.password'),
+            ]);
+        });
     }
 
     /**
