@@ -1,13 +1,13 @@
 {
-    "name": "laravel-notification-channels/:package_name",
-    "description": ":package_description",
-    "homepage": "https://github.com/laravel-notification-channels/:package_name",
+    "name": "laravel-notification-channels/bandwidth",
+    "description": "Laravel Notifiction for SMS provider Bandwidth",
+    "homepage": "https://github.com/laravel-notification-channels/bandwidth",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
-            "homepage": ":author_website",
+            "name": "Bas van Dinther",
+            "email": "hello@baspa.dev",
+            "homepage": "https://baspa.dev",
             "role": "Developer"
         }
     ],
@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "NotificationChannels\\:channel_namespace\\": "src"
+            "NotificationChannels\\BandwidthLaravelNotificationChannel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "NotificationChannels\\:channel_namespace\\Test\\": "tests"
+            "NotificationChannels\\BandwidthLaravelNotificationChannel\\Test\\": "tests"
         }
     },
     "scripts": {

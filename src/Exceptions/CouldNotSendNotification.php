@@ -1,6 +1,6 @@
 <?php
 
-namespace NotificationChannels\:channel_namespace\Exceptions;
+namespace NotificationChannels\BandwidthLaravelNotificationChannel\Exceptions;
 
 class CouldNotSendNotification extends \Exception
 {

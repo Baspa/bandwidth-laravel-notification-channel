@@ -1,10 +1,10 @@
 <?php
 
-namespace NotificationChannels\:channel_namespace;
+namespace NotificationChannels\BandwidthLaravelNotificationChannel;
 
 use Illuminate\Support\ServiceProvider;
 
-class :service_nameServiceProvider extends ServiceProvider
+class BandWidthServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -28,13 +28,10 @@ class :service_nameServiceProvider extends ServiceProvider
                 );
             });
          */
-
     }
 
     /**
      * Register the application services.
      */
-    public function register()
-    {
-    }
+    public function register() {}
 }
